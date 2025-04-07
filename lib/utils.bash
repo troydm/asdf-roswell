@@ -62,9 +62,9 @@ install_version() {
 		srcdir=$ASDF_DOWNLOAD_PATH/roswell-$ASDF_INSTALL_VERSION
 		cwdir=$(pwd); cd $srcdir
 		./bootstrap
-		./configure
+		./configure --prefix="$install_path"
 		make -j$ASDF_CONCURRENCY
-		cp -f "$srcdir"/src/ros "$install_path"/ros
+		make install
 		cd $cwdir
 
 		# TODO: Assert roswell executable exists.
