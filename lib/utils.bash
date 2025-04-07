@@ -42,7 +42,7 @@ download_release() {
 	filename="$2"
 
 	# TODO: Adapt the release URL convention for roswell
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	url="$GH_REPO/archive/refs/tags/v${version}.zip"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -59,7 +59,13 @@ install_version() {
 
 	(
 		mkdir -p "$install_path"
-		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+		srcdir=$ASDF_DOWNLOAD_PATH/roswell-$ASDF_INSTALL_VERSION
+		cwdir=$(pwd); cd $srcdir
+		./bootstrap
+		./configure
+		make -j$ASDF_CONCURRENCY
+		cp -f "$srcdir"/src/ros "$install_path"/ros
+		cd $cwdir
 
 		# TODO: Assert roswell executable exists.
 		local tool_cmd
