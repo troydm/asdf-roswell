@@ -61,7 +61,8 @@ install_version() {
 		local srcdir
 		srcdir=$ASDF_DOWNLOAD_PATH/roswell-$ASDF_INSTALL_VERSION
 		local cwdir
-		cwdir=$(pwd); cd "$srcdir"
+		cwdir=$(pwd)
+		cd "$srcdir"
 		./bootstrap
 		./configure --prefix="$install_path"
 		make -j"$ASDF_CONCURRENCY"
