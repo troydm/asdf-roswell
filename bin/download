@@ -15,5 +15,3 @@ release_dir="$ASDF_DOWNLOAD_PATH/$TOOL_NAME-$ASDF_INSTALL_VERSION"
 # Download release to the download directory
 download_release "$ASDF_INSTALL_VERSION" "$release_dir"
 
-# Remove the directory since we don't need to keep it
-rm -rf "$release_dir"
