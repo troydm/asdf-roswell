@@ -12,8 +12,6 @@ fail() {
 	exit 1
 }
 
-curl_opts=(-fsSL)
-
 # NOTE: You might want to remove this if roswell is not hosted on GitHub releases.
 if [ -n "${GITHUB_API_TOKEN:-}" ]; then
 	curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
@@ -37,15 +35,14 @@ list_all_versions() {
 }
 
 download_release() {
-	local version filename url
+	local version directory url
 	version="$1"
-	filename="$2"
+	directory="$2"
+	url="$GH_REPO.git"
 
-	# TODO: Adapt the release URL convention for roswell
-	url="$GH_REPO/archive/refs/tags/v${version}.zip"
-
-	echo "* Downloading $TOOL_NAME release $version..."
-	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+	rm -rf "$directory"
+	echo "* git cloning $TOOL_NAME release $version..."
+	git clone --depth 1 --branch "v$version" "$url" "$directory" || fail "Could not git clone $url"
 }
 
 install_version() {
@@ -62,12 +59,12 @@ install_version() {
 		local srcdir
 		srcdir=$ASDF_DOWNLOAD_PATH/roswell-$ASDF_INSTALL_VERSION
 		local cwdir
-		cwdir=$(pwd); cd $srcdir
+		cwdir=$(pwd); cd "$srcdir"
 		./bootstrap
 		./configure --prefix="$install_path"
-		make -j$ASDF_CONCURRENCY
+		make -j"$ASDF_CONCURRENCY"
 		make install
-		cd $cwdir
+		cd "$cwdir"
 
 		# TODO: Assert roswell executable exists.
 		local tool_cmd
