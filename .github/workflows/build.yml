@@ -7,16 +7,20 @@ on:
   pull_request:
 
 jobs:
-  plugin_test:
-    name: asdf plugin test
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
-    runs-on: ${{ matrix.os }}
+  plugin_test_linux:
+    name: asdf plugin test linux
+    runs-on: ubuntu-latest
     steps:
       - name: asdf_plugin_test
         uses: asdf-vm/actions/plugin-test@v3
+        with:
+          command: ros --version
+  plugin_test_macos:
+    name: asdf plugin test macos
+    runs-on: macos-latest
+    steps:
+      - name: asdf_plugin_test
+        uses: - asdf-vm/actions/plugin-test@v3
+                Homebrew/actions/setup-homebrew@master
         with:
           command: ros --version

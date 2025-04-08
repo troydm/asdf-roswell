@@ -10,10 +10,12 @@ source "${plugin_dir}/lib/utils.bash"
 
 # install deps
 if [[ "$(lsb_release -d | awk -F"\t" '{print $2}')" =~ "Ubuntu" ]]; then
-  sudo apt install build-essential libcurl4-openssl-dev
+    sudo apt install -y build-essential automake libcurl4-openssl-dev
+elif [[ "$(uname -a)" =~ "Darwin" && "$(brew --version)" =~ "Homebrew" ]]; then
+    brew install autoconf automake make
 else
-  echo "Please make sure that you have all necessary build tools and dependencies installed for build from source" >&2
-  echo "For more information see: https://roswell.github.io/Installation.html" >&2
+    echo "Please make sure that you have all necessary build tools and dependencies installed for build from source" >&2
+    echo "For more information see: https://roswell.github.io/Installation.html" >&2
 fi
 
 install_version "$ASDF_INSTALL_TYPE" "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH"
