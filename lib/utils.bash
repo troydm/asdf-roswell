@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+curl_opts=(-fsSL)
+
 # TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for roswell.
 GH_REPO="https://github.com/roswell/roswell"
 TOOL_NAME="roswell"
